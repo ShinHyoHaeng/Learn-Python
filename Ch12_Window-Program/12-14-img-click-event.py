@@ -21,5 +21,6 @@ label = Label(window, image=photo)
 label.bind("<Button>", clickImage)
 
 label.pack(expand=1, anchor=CENTER)
+# expand = 미사용 공간 확보 --> 부모 위젯(윈도우) 크기만큼 위젯의 크기를 확장
 
 window.mainloop()
