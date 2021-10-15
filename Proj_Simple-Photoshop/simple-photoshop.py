@@ -69,42 +69,100 @@ def func_exit() :
     window.destroy()
 
 def func_zoomin() :
-    pass
+    global window, canvas, paper, photo, photo2, oriX, oriY
+    scale = askinteger("확대배수", "확대할 배수를 입력하세요", minvalue=2, maxvalue=4)
+    photo2 = photo.clone()
+    photo2.resize(int(oriX * scale), int(oriY * scale))
+    newX = photo2.width
+    newY = photo2.height
+    displayImage(photo2, newX, newY)
 
 def func_zoomout() :
-    pass
+    global window, canvas, paper, photo, photo2, oriX, oriY
+    scale = askinteger("축소", "축소할 배수를 입력하세요", minvalue=2, maxvalue=4)
+    photo2 = photo.clone()
+    photo2.resize(int(oriX / scale), int(oriY / scale))
+    newX = photo2.width
+    newY = photo2.height
+    displayImage(photo2, newX, newY)
 
 def func_flip() :
-    pass
+    global window, canvas, paper, photo, photo2, oriX, oriY
+    photo2 = photo.clone()
+    photo2.flip()
+    newX = photo2.width
+    newY = photo2.height
+    displayImage(photo2, newX, newY)
 
 def func_flop() :
-    pass
+    global window, canvas, paper, photo, photo2, oriX, oriY
+    photo2 = photo.clone()
+    photo2.flop()
+    newX = photo2.width
+    newY = photo2.height
+    displayImage(photo2, newX, newY)
 
 def func_rotate() :
-    pass
+    global window, canvas, paper, photo, photo2, oriX, oriY
+    degree = askinteger("회전", "회전할 각도를 입력하세요", minvalue=0, maxvalue=360)
+    photo2.clone()
+    photo2.rotate(degree)
+    newX = photo2.width
+    newY = photo2.height
+    displayImage(photo2, newX, newY)
 
 def func_brightness() :
-    pass
+    global window, canvas, paper, photo, photo2, oriX, oriY
+    value = askinteger("밝기 조절", "값을 입력하세요(어둡게:0~100/밝게:100~200)", minvalue=0, maxvalue=200)
+    photo2.clone()
+    photo2.modulate(value, 100, 100)
+    newX = photo2.width
+    newY = photo2.height
+    displayImage(photo2, newX, newY)
 
 def func_clear() :
-    pass
-
-def func_unclear() :
-    pass
+    global window, canvas, paper, photo, photo2, oriX, oriY
+    value = askinteger("선명도 조절", "값을 입력하세요(어둡게:0~100/밝게:100~200)", minvalue=0, maxvalue=200)
+    photo2.clone()
+    photo2.modulate(100, value, 100)
+    newX = photo2.width
+    newY = photo2.height
+    displayImage(photo2, newX, newY)
 
 def func_bw() :
-    pass
-
-def func_border() :
-    # https://www.geeksforgeeks.org/wand-border-function-python/
-    pass
+    global window, canvas, paper, photo, photo2, oriX, oriY
+    photo2.clone()
+    photo2.type = "grayscale"
+    newX = photo2.width
+    newY = photo2.height
+    displayImage(photo2, newX, newY)
 
 def func_revert() :
-    pass
+    global window, canvas, paper, photo, photo2, oriX, oriY, newX, newY
+    photo2 = photo.clone()
+    newX = photo2.width
+    newY = photo2.height
+    displayImage(photo2, newX, newY)
+
+def func_border() :
+    global window, canvas, paper, photo, photo2, oriX, oriY
+    color = askstring("테두리 색상 선택", "색상값을 입력하세요")
+    b_width = askinteger("테두리 넓이 선택", "넓이값을 입력하세요", minvalue=0, maxvalue=10)
+    b_height = askinteger("테두리 높이 선택", "높이값을 입력하세요", minvalue=0, maxvalue=10)
+    photo2.clone()
+    photo2.border(color, b_height, b_width)
+    newX = photo2.width
+    newY = photo2.height
+    displayImage(photo2, newX, newY)
 
 def func_deskew() :
-    # https://www.geeksforgeeks.org/wand-deskew-function-python/
-    pass
+    global window, canvas, paper, photo, photo2, oriX, oriY
+    value = askfloat("기울임 보정", "값을 입력하세요(0.0~1.0)", minvalue=0.0, maxvalue=1.0)
+    photo2.clone()
+    photo2.deskew(value)
+    newX = photo2.width
+    newY = photo2.height
+    displayImage(photo2, newX, newY)
 
 def func_distort() :
     # https://www.geeksforgeeks.org/python-distort-method-in-wand/
