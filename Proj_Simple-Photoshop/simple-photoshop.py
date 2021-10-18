@@ -1,5 +1,6 @@
 
 ## Python 능력단위 과제: 미니 포토샵 프로그램 제작
+# 함수 내용 참고: https://docs.wand-py.org/en/0.6.7/guide/effect.html
 
 from tkinter import *
 from tkinter.filedialog import *
@@ -12,11 +13,6 @@ from wand.image import *
 def displayImage(img, width, height):
     global window, canvas, paper, photo, photo2, oriX, oriY
 
-    '''
-    # window 크기를 전체화면 크기로 지정
-    screenWidth = window.winfo_screenwidth()
-    screenHeight = window.winfo_screenheight()
-    '''
     window.geometry(str(width) + "x" + str(height))
 
     if canvas != None:
@@ -68,6 +64,7 @@ def func_exit() :
     window.quit()
     window.destroy()
 
+# 확대
 def func_zoomin() :
     global window, canvas, paper, photo, photo2, oriX, oriY
     scale = askinteger("확대배수", "확대할 배수를 입력하세요", minvalue=2, maxvalue=4)
@@ -77,15 +74,17 @@ def func_zoomin() :
     newY = photo2.height
     displayImage(photo2, newX, newY)
 
+# 축소
 def func_zoomout() :
     global window, canvas, paper, photo, photo2, oriX, oriY
-    scale = askinteger("축소", "축소할 배수를 입력하세요", minvalue=2, maxvalue=4)
+    scale = askinteger("축소배수", "축소할 배수를 입력하세요", minvalue=2, maxvalue=4)
     photo2 = photo.clone()
     photo2.resize(int(oriX / scale), int(oriY / scale))
     newX = photo2.width
     newY = photo2.height
     displayImage(photo2, newX, newY)
 
+# 좌우 반전
 def func_flip() :
     global window, canvas, paper, photo, photo2, oriX, oriY
     photo2 = photo.clone()
@@ -94,6 +93,7 @@ def func_flip() :
     newY = photo2.height
     displayImage(photo2, newX, newY)
 
+# 상하 반전
 def func_flop() :
     global window, canvas, paper, photo, photo2, oriX, oriY
     photo2 = photo.clone()
@@ -102,6 +102,7 @@ def func_flop() :
     newY = photo2.height
     displayImage(photo2, newX, newY)
 
+# 이미지 회전
 def func_rotate() :
     global window, canvas, paper, photo, photo2, oriX, oriY
     degree = askinteger("회전", "회전할 각도를 입력하세요", minvalue=0, maxvalue=360)
@@ -111,6 +112,7 @@ def func_rotate() :
     newY = photo2.height
     displayImage(photo2, newX, newY)
 
+# 밝기 조절
 def func_brightness() :
     global window, canvas, paper, photo, photo2, oriX, oriY
     value = askinteger("밝기 조절", "값을 입력하세요(어둡게:0~100/밝게:100~200)", minvalue=0, maxvalue=200)
@@ -120,15 +122,17 @@ def func_brightness() :
     newY = photo2.height
     displayImage(photo2, newX, newY)
 
+# 선명도 조절
 def func_clear() :
     global window, canvas, paper, photo, photo2, oriX, oriY
-    value = askinteger("선명도 조절", "값을 입력하세요(어둡게:0~100/밝게:100~200)", minvalue=0, maxvalue=200)
+    value = askinteger("선명도 조절", "값을 입력하세요(흐리게:0~100/선명하게:100~200)", minvalue=0, maxvalue=200)
     photo2.clone()
     photo2.modulate(100, value, 100)
     newX = photo2.width
     newY = photo2.height
     displayImage(photo2, newX, newY)
 
+# 흑백 효과
 def func_bw() :
     global window, canvas, paper, photo, photo2, oriX, oriY
     photo2.clone()
@@ -137,6 +141,7 @@ def func_bw() :
     newY = photo2.height
     displayImage(photo2, newX, newY)
 
+# 되돌리기
 def func_revert() :
     global window, canvas, paper, photo, photo2, oriX, oriY, newX, newY
     photo2 = photo.clone()
@@ -144,6 +149,7 @@ def func_revert() :
     newY = photo2.height
     displayImage(photo2, newX, newY)
 
+# 테두리
 def func_border() :
     global window, canvas, paper, photo, photo2, oriX, oriY
     color = askstring("테두리 색상 선택", "색상값을 입력하세요")
@@ -155,6 +161,7 @@ def func_border() :
     newY = photo2.height
     displayImage(photo2, newX, newY)
 
+# 기울임 보정
 def func_deskew() :
     global window, canvas, paper, photo, photo2, oriX, oriY
     value = askfloat("기울임 보정", "값을 입력하세요(0.0~1.0)", minvalue=0.0, maxvalue=1.0)
@@ -164,27 +171,82 @@ def func_deskew() :
     newY = photo2.height
     displayImage(photo2, newX, newY)
 
-def func_distort() :
-    # https://www.geeksforgeeks.org/python-distort-method-in-wand/
-    pass
-
+# 이미지 자르기
 def func_crop() :
-    pass
+    global window, canvas, paper, photo, photo2, oriX, oriY
+    left = askinteger("이미지 자르기", "가로 시작점 값을 입력하세요", minvalue=0, maxvalue=250)
+    top = askinteger("이미지 자르기", "세로 시작점 값을 입력하세요", minvalue=0, maxvalue=250)
+    right = askinteger("이미지 자르기", "가로 범위를 입력하세요", minvalue=0, maxvalue=250)
+    bottom = askinteger("이미지 자르기", "가로 시작점을 입력하세요", minvalue=0, maxvalue=250)
+    photo2.clone()
+    photo2.crop(left, top, right, bottom)
+    newX = photo2.width
+    newY = photo2.height
+    displayImage(photo2, newX, newY)
 
+# 흐림 효과
 def func_blur() :
-    pass
+    global window, canvas, paper, photo, photo2, oriX, oriY
+    value1 = askinteger("기본 흐림 효과", "반경 값을 입력하세요(0~10)", minvalue=0, maxvalue=10)
+    value2 = askinteger("기본 흐림 효과", "흐림 값을 입력하세요(0~10)", minvalue=0, maxvalue=10)
+    photo2.clone()
+    photo2.blur(radius=value1, sigma = value2)
+    newX = photo2.width
+    newY = photo2.height
+    displayImage(photo2, newX, newY)
 
+# 가우시안 흐림 효과
 def func_gb() :
-    pass
+    global window, canvas, paper, photo, photo2, oriX, oriY
+    value = askinteger("가우시안 흐림 효과", "흐림 값을 입력하세요(0~10)", minvalue=0, maxvalue=10)
+    photo2.clone()
+    photo2.blur(sigma=value)
+    newX = photo2.width
+    newY = photo2.height
+    displayImage(photo2, newX, newY)
 
+# 선명 효과
 def func_sharpen() :
-    pass
+    global window, canvas, paper, photo, photo2, oriX, oriY
+    value1 = askinteger("선명 효과", "반경 값을 입력하세요(0~10)", minvalue=0, maxvalue=10)
+    value2 = askinteger("선명 효과", "한계 값을 입력하세요(0~10)", minvalue=0, maxvalue=10)
+    photo2.clone()
+    photo2.sharpen(radius=value1, sigma=value2)
+    newX = photo2.width
+    newY = photo2.height
+    displayImage(photo2, newX, newY)
 
-def func_mosaic() :
-    pass
+# 노이즈 반점 제거
+def func_despeckle() :
+    global window, canvas, paper, photo, photo2, oriX, oriY
+    photo2.clone()
+    photo2.despeckle()
+    newX = photo2.width
+    newY = photo2.height
+    displayImage(photo2, newX, newY)
 
-def func_sketch() :
-    pass
+# 엣지 효과
+def func_edge() :
+    global window, canvas, paper, photo, photo2, oriX, oriY
+    photo2.clone()
+    photo2.transform_colorspace('gray')
+    value = askinteger("엣지 효과", "반경 값을 입력하세요(0~10)", minvalue=0, maxvalue=10)
+    photo2.edge(radius=value)
+    newX = photo2.width
+    newY = photo2.height
+    displayImage(photo2, newX, newY)
+
+# 엠보스 효과
+def func_emboss() :
+    global window, canvas, paper, photo, photo2, oriX, oriY
+    value1 = askinteger("엠보스 효과", "반경 값을 입력하세요(0~10)", minvalue=0, maxvalue=10)
+    value2 = askinteger("엠보스 효과", "한계 값을 입력하세요(0~10)", minvalue=0, maxvalue=10)
+    photo2.clone()
+    photo2.transform_colorspace('gray')
+    photo2.emboss(radius=value1, sigma=value2)
+    newX = photo2.width
+    newY = photo2.height
+    displayImage(photo2, newX, newY)
 
 
 # 변수 선언 부분
@@ -196,12 +258,6 @@ oriX,oriY = 0,0
 # 메인 코드 부분
 window = Tk()
 window.geometry("250x250")
-'''
-# 창 크기를 fullscreen으로 설정
-screenWidth = window.winfo_screenwidth()
-screenHeight = window.winfo_screenheight()
-window.geometry("%dx%d" % (screenWidth, screenHeight))
-'''
 
 window.title("Simple Photoshop v.1.1")
 
@@ -211,15 +267,16 @@ window.config(menu=mainMenu)
 photo = PhotoImage()
 pLabel = Label(window, image=photo)
 pLabel.pack(expand=1, anchor=CENTER)
-'''
-photoWidth = photo.width()
-photoHeight = photo.height()
-pLabel.place(x=((screenWidth/2)-(photoWidth/2)), y=((screenHeight/2)-(photoHeight/2)))
-print((screenHeight/2)-(photoHeight/2))
-'''
+
 
 # 메뉴 구성
 fileMenu = Menu(mainMenu)
+editMenu = Menu(mainMenu)
+imageMenu = Menu(mainMenu)
+filterMenu = Menu(mainMenu)
+viewMenu = Menu(mainMenu)
+
+# File(파일)
 mainMenu.add_cascade(label="File", menu=fileMenu)
 fileMenu.add_command(label="Open", command=func_open) # 이미지 열기
 # fileMenu.add_command(label="Save", command=func_save) # 저장
@@ -227,61 +284,42 @@ fileMenu.add_command(label="Save As...", command=func_save_as) # 다른 이름�
 fileMenu.add_command(label="Revert", command=func_revert) # 되돌리기
 fileMenu.add_command(label="Exit", command=func_exit) # 프로그램 종료
 
-editMenu = Menu(mainMenu)
+# Edit(편집)
 transformMenu = Menu(editMenu)
 flipMenu = Menu(editMenu)
 mainMenu.add_cascade(label="Edit", menu=editMenu)
-editMenu.add_command(label="Stroke",command=func_border)
+editMenu.add_command(label="Stroke",command=func_border) # 테두리
 editMenu.add_cascade(label="Transform", menu=transformMenu)
-transformMenu.add_command(label="Rotate", command=func_rotate)
-transformMenu.add_command(label="Remove Skew", command=func_deskew)
-transformMenu.add_command(label="Distort", command=func_distort)
+transformMenu.add_command(label="Rotate", command=func_rotate) # 이미지 회전
+transformMenu.add_command(label="Remove Skew", command=func_deskew) # 기울임 보정
 editMenu.add_cascade(label="Flip", menu=flipMenu)
-flipMenu.add_command(label="Flip Horizontal", command=func_flip)
-flipMenu.add_command(label="Flip Vertical", command=func_flop)
+flipMenu.add_command(label="Flip Horizontal", command=func_flip) # 좌우 반전
+flipMenu.add_command(label="Flip Vertical", command=func_flop) # 상하 반전
 
-imageMenu = Menu(mainMenu)
+# Image(이미지)
 mainMenu.add_cascade(label="Image", menu=imageMenu)
-imageMenu.add_command(label="Greyscale", command=func_bw)
-imageMenu.add_command(label="Brightness", command=func_brightness)
-imageMenu.add_command(label="채도", command=func_clear)
-imageMenu.add_command(label="Crop", command=func_crop)
+imageMenu.add_command(label="Greyscale", command=func_bw) # 흑백 효과
+imageMenu.add_command(label="Brightness", command=func_brightness) # 밝기 조절
+imageMenu.add_command(label="Clear", command=func_clear) # 선명도 조절
+imageMenu.add_command(label="Crop", command=func_crop) # 자르기
 
-filterMenu = Menu(mainMenu)
+# Filter(필터)
 blurMenu = Menu(filterMenu)
 noiseMenu = Menu(filterMenu)
 mainMenu.add_cascade(label="Filter", menu=filterMenu)
 filterMenu.add_cascade(label="Blur", menu=blurMenu)
-blurMenu.add_command(label="Blur", command=func_blur)
-blurMenu.add_command(label="Gaussian Blur", command=func_gb)
-filterMenu.add_command(label="Sharpen", command=func_sharpen)
-filterMenu.add_command(label="Mosaic", command=func_mosaic)
-filterMenu.add_command(label="Sketch", command=func_sketch)
+blurMenu.add_command(label="Blur", command=func_blur) # 흐림 효과(기본)
+blurMenu.add_command(label="Gaussian Blur", command=func_gb) # 가우시안 흐림 효과
+filterMenu.add_command(label="Sharpen", command=func_sharpen) # 선명 효과
+filterMenu.add_command(label="Despeckle", command=func_despeckle) # 노이즈 반점 제거
+filterMenu.add_command(label="Edge", command=func_edge) # 엣지 효과
+filterMenu.add_command(label="Emboss", command=func_emboss) # 엠보스 효과
 
-viewMenu = Menu(mainMenu)
+# View(보기)
 mainMenu.add_cascade(label="View", menu=viewMenu)
-viewMenu.add_command(label="Zoom In", command=func_zoomin)
-viewMenu.add_command(label="Zoom out", command=func_zoomout)
+viewMenu.add_command(label="Zoom In", command=func_zoomin) # 확대
+viewMenu.add_command(label="Zoom out", command=func_zoomout) # 축소
 
-
-'''
-image1Menu.add_command(label="확대", command=func_zoomin)
-image1Menu.add_command(label="축소", command=func_zoomout)
-image1Menu.add_separator()
-image1Menu.add_command(label="상하 반전", command=func_flip)
-image1Menu.add_command(label="좌우 반전", command=func_flop)
-image1Menu.add_command(label="회전", command=func_rotate)
-
-image2Menu = Menu(mainMenu)
-mainMenu.add_cascade(label="이미지 처리(2)", menu=image2Menu)
-image2Menu.add_command(label="밝게", command=func_bright)
-image2Menu.add_command(label="어둡게", command=func_dark)
-image2Menu.add_separator()
-image2Menu.add_command(label="선명하게", command=func_clear)
-image2Menu.add_command(label="탁하게", command=func_unclear)
-image2Menu.add_separator()
-image2Menu.add_command(label="흑백이미지", command=func_bw)
-'''
 
 window.mainloop()
 
